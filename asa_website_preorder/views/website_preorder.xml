@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+		<!-- preorder page page -->
+		<template id="preorder" name="Website Product Preorder Request">
+			<t t-call="website.layout">
+				<div class="container mb64">
+					<div class="col-md-12">	
+						<h3 style="text-align: center;">
+							Pre Order Products
+						</h3>
+						<div class="row">
+								<t t-foreach="products" t-as="product">
+									<div class="col-md-3" style="border: 1px solid rgba(100, 100, 100, 0.2);padding: 0 15px 10px 32px;">
+										<div class="oe_product_image">
+											<a t-attf-href="/shop/product/#{slug(product)}" tabindex="-1">
+												<span t-field="product.image_1920"
+							                        t-options="{'widget': 'image', 'preview_image': 'image_1024' if product_image_big else 'image_256'}"
+							                        class="d-flex h-100 justify-content-center align-items-center"/>
+												
+											</a>
+										</div>
+										<br/>
+										<div class="product details product-item-details">
+											<strong class="product name product-item-name">
+												<!-- <a class="product-item-link" t-attf-href="/shop/product/#{slug(product)}"> -->
+													<span t-field="product.name" />
+												<!-- </a> -->
+											</strong>
+											
+											<!--Price -->
+											<div class="product-reviews-summary short">
+												<div class="rating-summary">
+													<span class="label">
+														<span>Status Pre Order:</span> <span t-field="product.status_preorder" 
+														   />
+													</span>
+												</div>
+												<div class="rating-summary">
+													<span class="label">
+														<span>Tgl Perkiraan Ready:</span> <span t-field="product.tgl_perkiraan_ready" 
+														   />
+													</span>
+													<br/>
+													<span class="label">
+														<span>Tgl Selesai PO:</span><br/> <span t-field="product.tgl_selesai_po" 
+														   />
+													</span>
+												</div>
+												<div class="rating-summary">
+													<span class="label">
+														<span>Jumlah yg Sudah di Pesan:</span>
+													</span>
+													<div class="" title="100%">
+														<span t-field="product.tot_preorder" />
+													</div>
+												</div>
+											</div>
+
+											<div class="product-item-inner">
+												<div class="product actions">
+													<div class="actions-primary" style="text-align: center;">
+														<form t-attf-action="/preorder/konfirmasi/" method="post">
+															<input name="product_id" t-att-value="product.id"
+																type="hidden" />
+															<input type="hidden" name="csrf_token"
+																t-att-value="request.csrf_token()" />
+															<t t-if="product.status_preorder == 'open'">
+																<button type="submit" title="Add to Cart" class="btn btn-primary"
+																	onclick="submit();" style="background-color: #337ab7 !important; border: 1px solid white !important;">
+																	
+																	<span> Pre Order </span>
+																</button>
+															</t>
+															<t t-if="product.status_preorder == 'limit'">
+																 <div id="out-of-stock-message" class="out-of-stock" style="color: #fff;
+										    					background-color: #c9302c;
+										    					font: bold 20px Sans-Serif;
+										    					text-align: center;
+										    					position: relative;
+										    					padding: 4px 4px 4px 4px !important; 
+										    					cursor: default;
+										    					z-index: 99;
+										    					margin-left: 10px;
+										    					margin-top: 4px;">
+																	 <span class=""> Kuota PO Full Booked </span>
+																</div>
+															</t>
+															<t t-if="product.status_preorder == 'close'">
+																 <div id="out-of-stock-message" class="out-of-stock" style="color: #fff;
+										    					background-color: #c9302c;
+										    					font: bold 20px Sans-Serif;
+										    					text-align: center;
+										    					position: relative;
+										    					padding: 4px 4px 4px 4px !important; 
+										    					cursor: default;
+										    					z-index: 99;
+										    					margin-left: 10px;
+										    					margin-top: 4px;">
+																	 <span class=""> PO telah ditutup </span>
+																</div>
+															</t>
+															
+														</form>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</t>
+						</div>		
+						<div class="products_pager form-inline justify-content-center mt-3">
+                       		<t t-call="website.pager"/>
+                    	</div>
+					</div>
+				</div> 
+			</t>
+		</template>
+		
+	<template id ="preorder_confirmation" name="Pre Order Confirmation">
+        <t t-set="no_footer">1</t> 
+        <t t-call="website.layout">
+            <div id="wrap">
+            	<t t-if="not valid">
+		            <div class="alert alert-danger">
+		                <strong>Wraning!</strong>
+		                Quantity tidak boleh melebihi Qty Stock Pre Order
+		            </div>
+		        </t>
+                <div class="container oe_website_sale py-2">
+                    <div class="row">
+                        <div class="col-12 col-xl order-xl-1 oe_cart">
+                     	<!-- <form id="confirmorderform" class="confirmorderform">
+	                            <input type="hidden" id="product_id" name="product_id" t-att-value="product.id"/>
+	                            <input type="hidden" id="partner" name="partner" t-att-value="partner.id"/>
+	                            <input type="hidden" id="sisaorder" name="sisaorder" t-att-value="product.saldo_preorder"/>
+	                            <div class="oe_product_image">
+								<a t-attf-href="/shop/product/#{slug(product)}" tabindex="-1">
+									
+									<span t-field="product.image_1920"
+								      t-options="{'widget': 'image', 'preview_image': 'image_1024' if product_image_big else 'image_256'}"
+									    class="product-image-photo default_image"/>
+								</a>
+								</div>
+								<div class="product details product-item-details">
+								  <strong class="product name product-item-name">
+									<a class="product-item-link" t-attf-href="/shop/product/#{slug(product)}">
+										<span t-field="product.name" />
+									</a>
+									<br/>
+									<span class="label">
+										<span>Tgl Perkiraan Ready:</span> <span t-field="product.tgl_perkiraan_ready"/>
+									</span>
+									<br/>
+									<span class="label">
+										<span>Tgl Selesai PO:</span><span t-field="product.tgl_selesai_po"/>
+									</span>
+								  </strong>
+								  <br/>
+								  <div class="input-group-prepend">
+									 <div >
+									 	<strong>
+											<span class="label">
+											<span>Quantity</span>
+											</span>
+										</strong>
+										<br/>
+										<div class="" title="15%">
+											<input type="number" id="qty_preorder" name="qty_preorder" class="form-control" autocomplate="off" required="required" 
+											 t-att-value="int(1)"/>
+										</div>
+									</div>
+									</div>
+								</div>
+	                            <br/><br/>
+	                            <button type="submit"
+                                     class="btn btn-primary"
+                                     id="confirm_preorder" 
+                                     style="background-color: #337ab7 !important; border: 1px solid white !important;">
+                                          Confirm Pre Order
+                            </button>                        
+                        </form> -->
+
+                        <form action="/preorder/confirmation/submit" method="post" class="checkout_autoformat mt-5" role="form" enctype="multipart/form-data">
+                            <input type="hidden" name="token" t-att-value="token"/>
+                            <input type="hidden" id="product_id" name="product_id" t-att-value="product.id"/>
+                            <input type="hidden" id="partner" name="partner" t-att-value="partner.id"/>
+                            <input type="hidden" id="saldo_preorder" name="saldo_preorder" t-att-value="product.saldo_preorder"/>
+                            <div class="oe_product_image">
+							<a t-attf-href="/shop/product/#{slug(product)}" tabindex="-1">
+								
+								<span t-field="product.image_1920"
+							      t-options="{'widget': 'image', 'preview_image': 'image_1024' if product_image_big else 'image_256'}"
+								    class="product-image-photo default_image"/>
+							</a>
+							</div>
+							<div class="product details product-item-details">
+							  <strong class="product name product-item-name">
+								<a class="product-item-link" t-attf-href="/shop/product/#{slug(product)}">
+									<span t-field="product.name" />
+								</a>
+								<br/>
+								<span class="label">
+									<span>Tgl Perkiraan Ready:</span> <span t-field="product.tgl_perkiraan_ready"/>
+								</span>
+								<br/>
+								<span class="label">
+									<span>Tgl Selesai PO:</span><span t-field="product.tgl_selesai_po"/>
+								</span>
+							  </strong>
+							  <br/>
+							  <div class="input-group-prepend">
+								 <div >
+								 	<strong>
+										<span class="label">
+										<span>Quantity</span>
+										</span>
+									</strong>
+									<br/>
+									<div class="" title="15%">
+										<input type="number" id="qty_preorder" name="qty_preorder" class="form-control" autocomplate="off" required="required" 
+										 t-att-value="int(1)"/>
+									</div>
+								</div>
+								</div>
+							</div>
+                            <br/><br/>
+                            <button type="submit" title="Add preorder" class="btn btn-primary"
+								onclick="submit();" style="background-color: #337ab7 !important; border: 1px solid white !important;">
+										<span>Confirm Pre Order</span>
+							</button>                            
+                        </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    
+    <template id="preorder_thankyou" name="Preorder Thank You">
+			<t t-call="website.layout">
+				<div id="wrap">
+					<div class="oe_structure" />
+					<div class="container">
+						<h1>Terima Kasih...sudah melakukan Pre Order</h1> 
+						<div class="row">
+							<div class="col-md-12">
+								<div >
+									Kami akan menghubungi Anda Apabila Product Sudah Ready.....
+									
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="oe_structure" />
+				</div>
+			</t>
+		</template>	
+		
+		 <template id="product_preorder_in_products_item_page" inherit_id="website_sale.products_item" active="True" customize_show="True" name="Show Pre Order Qty">
+            <xpath expr="//div//div//div" position="after">
+            	<t t-if="product.pre_order_products == True">
+            		<span class="label">
+						<span>Status Pre Order:</span> <span t-field="product.status_preorder"/>
+					</span>
+					<br/>
+            		<span class="label">
+						<span>Tgl Perkiraan Ready:</span> <span t-field="product.tgl_perkiraan_ready"/>
+					</span>
+					<br/>
+	                <span class="label">
+					<span>Sudah di Pesan:</span>
+					</span>
+					<span t-field="product.tot_preorder" />
+				</t>	
+            </xpath>
+    
+        </template>
+		
+
+        <template id="preorder_qty_in_products_item_page" inherit_id="website_sale.product" active="True" customize_show="True" name="Show Pre Order Qty">
+            <xpath expr="//div[@id='product_attributes_simple']" position="after">
+            	<t t-if="product.pre_order_products == True">
+            	<div class="product-item-inner">
+					<div class="product actions">
+						<div class="actions-primary" style="text-align: center;">
+							<form t-attf-action="/preorder/konfirmasi/" method="post">
+								<input name="product_id" t-att-value="product.id"
+									type="hidden" />
+								<input type="hidden" name="csrf_token"
+									t-att-value="request.csrf_token()" />
+								<t t-if="product.status_preorder == 'open'">
+									<button type="submit" title="Add to PreOrder" class="btn btn-primary btn-lg mt16 js_check_product a-submit d-block d-sm-inline-block"
+										onclick="submit();">
+																	
+										<span> Pre Order </span>
+									</button>
+								</t>
+															
+							</form>
+						</div>
+					</div>
+				</div>	
+			    <br/>
+				<div>
+					<span class="label">
+						<span>Status Pre Order:</span> <span t-field="product.status_preorder"/>
+					</span>
+					<br/>
+					<span class="label">
+						<span>Tgl Perkiraan Ready:</span> <span t-field="product.tgl_perkiraan_ready"/>
+					</span>
+					<br/>
+					<span class="label">
+						<span>Jumlah yg Sudah di Pesan:</span>
+					</span>
+					<span t-field="product.tot_preorder" />
+				</div>
+				</t>
+				<br/>
+			      <t t-if="product.preorder_ids" t-call="portal.portal_table">
+			        <thead>
+			          <tr class="active">
+			            <th class="text-center">No</th>
+			            <th class="text-center">ID Customer</th>
+			            <th class="text-center">Jumlah Pesanan</th>
+			          </tr>
+			        </thead>
+			        <tbody>
+			          <t t-foreach="product.preorder_ids" t-as="order">
+			            <tr>
+			              <td class="text-center"><span t-esc="order_index + 1"/></td>
+			              <td class="text-right"><span t-field="order.partner_id.id"/></td>
+			              <td class="text-right"><span t-field="order.product_qty"/></td>
+			            </tr>
+			          </t>
+			        </tbody>
+			      </t>
+						   
+            </xpath>
+    
+        </template>
+
+</odoo>

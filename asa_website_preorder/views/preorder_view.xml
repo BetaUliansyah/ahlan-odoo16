@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_preorder_tree" model="ir.ui.view">
+            <field name="name">preorder.tree</field>
+            <field name="model">pre.order</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="order_date"/>
+                    <field name="partner_id" string="Customer"/>
+                    <field name="product_id"/>
+                    <field name="product_qty"/>
+                    <field name="note"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_preorder_form" model="ir.ui.view">
+            <field name="name">preorder.form</field>
+            <field name="model">pre.order</field>
+            <field name="arch" type="xml">
+                <form string="Pre Order">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="order_date"/>
+                                <field name="partner_id" string="Customer"/>
+                                <field name="product_id"/>
+                                <field name="product_qty"/>
+                                <field name="note"/>
+                            </group>
+                            <group>
+                                
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- FILTERS  -->
+       <record id="view_preorder_filter" model="ir.ui.view">
+            <field name="name">pre.order.search</field>
+            <field name="model">pre.order</field>
+            <field name="arch" type="xml">
+                <search string="Pre Order">
+                     <field name="partner_id"/>
+                     <field name="product_id"/>
+                     <group expand="0" string="Group By">
+                        <filter name="product" string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter name="partner" string="Customer" domain="[]" context="{'group_by':'partner_id'}"/>
+                    </group>
+                </search>
+             </field>
+         </record>
+        
+      <record model="ir.actions.act_window" id="action_preorder">
+        <field name="name">Pre Order</field>
+        <field name="res_model">pre.order</field>
+        <field name="context">{'search_default_product':1}</field>
+        <field name="view_mode">tree,form</field>
+      </record>
+        
+        
+                                
+      <menuitem id="menu_preorder"
+                 parent="sale.sale_order_menu" name="Pre Order"    
+                  sequence="10" 
+                  action="action_preorder"/>
+
+
+     <record id="view_cancel_pre_order_tree" model="ir.ui.view">
+            <field name="name">cancel.pre.order.tree</field>
+            <field name="model">cancel.pre.order</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="date"/>
+                    <field name="partner_id" string="Customer"/>
+                    <field name="product_id"/>
+                    <field name="product_qty"/>
+                    <field name="note"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_cancel_pre_order_form" model="ir.ui.view">
+            <field name="name">cancel.pre.order.form</field>
+            <field name="model">cancel.pre.order</field>
+            <field name="arch" type="xml">
+                <form string="Cancel Pre Order">
+                    <header>
+                    <button string="Validate" name="action_validate" states="draft" type="object" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,validate"/>
+                </header>
+                    <sheet>
+                         <div class="oe_button_box" name="button_box">
+                            <button name="action_view_preorder" type="object" class="oe_stat_button" icon="fa-list-ol" string="List Pre Order">
+                            </button>
+
+                    </div>
+                        <group>
+                            <group>
+                                <field name="date"/>
+                                <field name="partner_id" string="Customer" readonly="1"/>
+                                <field name="product_id" readonly="1"/>
+                                <field name="product_qty" readonly="1"/>
+                                <field name="note" readonly="1"/>
+                            </group>
+                            <group>
+                                
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- FILTERS  -->
+       <record id="view_cancel_pre_order_filter" model="ir.ui.view">
+            <field name="name">cancel.pre.order.search</field>
+            <field name="model">cancel.pre.order</field>
+            <field name="arch" type="xml">
+                <search string="Cancel Pre Order">
+                     <field name="partner_id"/>
+                     <field name="product_id"/>
+                     <group expand="0" string="Group By">
+                        <filter name="product" string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter name="partner" string="Customer" domain="[]" context="{'group_by':'partner_id'}"/>
+                    </group>
+                </search>
+             </field>
+         </record>
+        
+      <record model="ir.actions.act_window" id="action_cancel_preorder">
+        <field name="name">Cancel Pre Order</field>
+        <field name="res_model">cancel.pre.order</field>
+        <field name="context">{'search_default_product':1}</field>
+        <field name="view_mode">tree,form</field>
+      </record>
+        
+        
+                                
+      <menuitem id="menu_cancel_preorder"
+                 parent="sale.sale_order_menu" name="Cancel Pre Order"    
+                  sequence="11" 
+                  action="action_cancel_preorder"/>      
+
+
+    </data>
+</odoo>

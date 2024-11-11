@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Template for adding the pre bookings in the portal my home-->
+    <template id="portal_my_home_pre_order"
+              name="portal_my_home_inherit_asa_website_preorder"
+              inherit_id="portal.portal_my_home" customize_show="True" >
+       <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+           <t t-call="portal.portal_docs_entry">
+               <t t-set="title">Pre Order</t>
+               <t t-set="url" t-value="'/my/pre_order'"/>
+               <t t-set="placeholder_count" t-value="'pre_order_count'"/>
+           </t>
+       </xpath>
+    </template>
+    <!-- Template for the breadcrumbs for the pre booking-->
+    <template id="portal_my_home_menu_pre_order"
+              name="Portal layout : pre order menu entries"
+          	inherit_id="portal.portal_breadcrumbs" priority="65">
+    	<xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+        	<li t-if="page_name == 'pre_order'"
+            	class="breadcrumb-item active">
+            	<span>Pre Order</span>
+        	</li>
+            <li t-if="page_name=='preorder_details'"
+                class="breadcrumb-item active">
+                <a t-attf-href="/my/pre_order"
+                   arialabel="Preorder Details"
+                   title="Pre Order Details">
+                    <span>Pre Order Details</span>
+                </a>
+                <span>/
+                    <em t-out="preorder_product_name"/>
+                </span>
+            </li>
+    	</xpath>
+	</template>
+    <!-- List of pre bookings to show in the portal table-->
+    <template id="portal_my_pre_order" name="My Pre Order">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Pre Order</t>
+            </t>
+            <t t-if="pre_order" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Product</th>
+                        <th>Total Order</th>
+                        <th>Total Order Terbayar</th>
+                        <th>Total Order Belum Terbayar</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <t t-foreach="pre_order" t-as="order">
+                        <tr>
+                            <td>
+                                <a t-attf-href="/my/pre_order/#{order['product_id']}">
+                                    <span t-esc="order['product_name']"/>
+                                </a>
+                            </td>
+                            <td>
+                                <span t-esc="order['total']"/>
+                            </td>
+                             <td>
+                                <span t-esc="order['qty_inv']"/>
+                            </td>
+                             <td>
+                                <span t-esc="order['sisa']"/>
+                            </td>
+                            <td>
+                                <form t-attf-action="/preorder/konfirmasi/" method="post">
+                                    <input name="product_id" t-att-value="order['product_template_id']"
+                                        type="hidden" />
+                                    <input type="hidden" name="csrf_token"
+                                        t-att-value="request.csrf_token()" />
+                                    <t t-if="order['status'] == 'open'">
+                                        <button type="submit" title="Add to Cart" class="btn btn-primary"
+                                            onclick="submit();" style="background-color: #337ab7 !important; border: 1px solid white !important;">
+                                            
+                                            <span> Add Qty PO </span>
+                                        </button>
+                                    </t>
+                                </form>
+                            </td>
+                            <td>
+                                <form t-attf-action="/preorder/order" method="post">
+                                    <input name="product_id" t-att-value="order['product_id']" type="hidden" />
+                                    <input name="qty" t-att-value="order['sisa']" type="hidden" />
+                                    <input type="hidden" name="csrf_token"
+                                            t-att-value="request.csrf_token()" />
+                                            <button type="submit" title="Add to Cart" class="btn btn-primary"
+                                                                                onclick="submit();" style="background-color: #337ab7 !important; border: 1px solid white !important;">
+                                                                                
+                                                <span> Add to Cart </span>
+                                            </button>
+                                                                            
+                                </form>
+                            </td>                        
+                        </tr>
+                    </t>
+                </tbody>
+            </t>
+
+        </t>
+    </template>
+
+     <template id="website_preorder_detail"
+              name="Pre Order Detail">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Pre Order</t>
+            </t>
+            <!-- Intro-->
+            <div class="pb-2 pt-3 card-header bg-white"
+                 style="position:relative;">
+                <h2 class="my-0">
+                    Pre Order Details
+                </h2>
+            </div>
+            <!-- Information-->
+            <div id="information">
+                <div class="pb-2 pt-3 card-header bg-white">
+                    <div class="row">
+                        <div class="mb-3 col-6">
+                            <strong>Product</strong>
+                            <span t-esc="preorder_product_name"/>
+                        </div>
+                        <div class="mb-3 col-6">
+                            <strong>Total Order</strong>
+                            <span t-esc="preorder_total"/>
+                        </div>
+                         <div class="mb-3 col-6">
+                            <strong>Total Order Terbayar</strong>
+                            <span t-esc="qty_inv"/>
+                        </div>
+                         <div class="mb-3 col-6">
+                            <strong>Total Order Belum Terbayar</strong>
+                            <span t-esc="sisa"/>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                    </div>
+                    <br/>
+                        <h4 class="my-0">
+                            Details Order
+                        </h4>
+                        <table class="table table-sm">
+                        <thead class="bg-100">
+                            <tr>
+                                <th>Date Order</th>
+                                <th>Products</th>
+                                <th class="text-right">Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="data_preorder" t-as="order">
+                                <tr>
+                                    <td class="text-left">
+                                        <span t-esc="order.order_date" t-options='{"widget": "date","format": "dd-MM-yyyy"}'/>
+                                    </td>
+                                    <td class="text-left">
+                                        <span t-esc="order.product_id.name"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="order.product_qty"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <div class="col-12" style="text-align:right;align:right">
+                        <span class="btn-group flex-grow-4 mb-2 float-right" id="portal_cancel">
+                            <a type="button"
+                               class="btn btn-secondary  flex-grow-4 mb-2"
+                               data-bs-toggle="modal"
+                               data-bs-target="#staticBackdrop"
+                               data-toggle="tooltip"
+                               data-placement="bottom"
+                               title="click this button to cancel the order">
+                                <i class="fa fa-times-circle"
+                                   style="font-size:23px;color:red"/>
+                                Pembatalan
+                            </a>
+                        </span>
+                    </div>
+                    <div class="modal fade" id="staticBackdrop"
+                     data-bs-backdrop="static" data-bs-keyboard="false"
+                     tabindex="-1" aria-labelledby="staticBackdropLabel"
+                     aria-hidden="true">
+                        <div class="modal-dialog">
+                            <form id="editReasonForm" class="editReasonForm">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5"
+                                            id="staticBackdropLabel">Provide Reason
+                                            for Cancel:
+                                        </h1>
+                                        <button type="button" class="btn-close"
+                                                data-bs-dismiss="modal"
+                                                aria-label="Close"/>
+                                    </div>
+                                    <div class="modal-body m-3">
+                                        <input type="hidden" t-att-value="preorder_product_id" id="product_id"/>
+                                        <div class="form-group row mb-3">
+                                            <label for="reason"
+                                                   class="col-sm-2 col-form-label">
+                                                Product:
+                                            </label>
+
+                                            <div class="col-sm-9">
+                                                <input type="text"
+                                                       t-att-value="preorder_product_name"
+                                                       class="form-control"
+                                                       id="product"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-3">
+                                            <label for="reason"
+                                                   class="col-sm-2 col-form-label">
+                                                Qty Order Belum Terbayar:
+                                            </label>
+
+                                            <div class="col-sm-9">
+                                                <input type="text"
+                                                        t-att-value="sisa"
+                                                       class="form-control"
+                                                       id="qty_order"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-3">
+                                            <label for="reason"
+                                                   class="col-sm-2 col-form-label">
+                                                Qty Cancel:
+                                            </label>
+
+                                            <div class="col-sm-9">
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="qty"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-3">
+                                            <label for="reason"
+                                                   class="col-sm-2 col-form-label">
+                                                Note:
+                                            </label>
+
+                                            <div class="col-sm-9">
+                                                <input type="text"
+                                                       class="form-control"
+                                                       id="note"
+                                                       placeholder="Note for Cancel "/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row row mb-3">
+                                            <div class="modal-footer">
+                                                <button type="button"
+                                                        class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">
+                                                    Close
+                                                </button>
+                                                <button type="submit"
+                                                        class="btn btn-primary"
+                                                        id="submit_button">
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </t>
+    </template>
+
+
+</odoo>

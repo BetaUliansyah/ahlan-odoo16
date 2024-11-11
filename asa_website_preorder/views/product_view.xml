@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+	
+		<!-- Product Form View Inherited -->
+		<record model="ir.ui.view" id="view_product_preorder_request_form_inherited">
+			<field name="name">product.preorder.request.frm.inherited</field>
+			<field name="model">product.template</field>    		
+			<field name="inherit_id" ref="product.product_template_only_form_view"/>    		
+			<field name="arch" type="xml">  
+				 <div name="options" position="after">
+	               <div>
+	                  	<field name="pre_order_products"/>  
+						<label for="pre_order_products"/> 
+	               </div>
+	            </div>      					
+			<xpath expr="//page[@name='general_information']" position="after">
+             	<page string="Pre Order" attrs="{'invisible': [('pre_order_products', '=', False)]}">
+             		<group>
+	             		<group>
+	             			<field name="status_preorder"/>
+	             			<field name="tgl_perkiraan_ready"/>
+	             			<field name="tgl_selesai_po"/>
+	             			<field name="jml_preorder"/>
+	             			<field name="tot_preorder"/>
+	             			<field name="saldo_preorder"/>
+	             		</group>
+	             		<group>
+	             			
+	             		</group>
+             		</group>
+             		<field name="preorder_ids">
+						<tree string="Pre Order" editable="bottom">
+	                       <field name="order_date"/>
+			               <field name="partner_id" string="Customer"/>
+			               <field name="product_qty"/>
+	                    </tree>
+                    </field>
+            	</page>
+         	</xpath>
+			</field>                	
+    	</record>
+
+	</data>
+</odoo>
