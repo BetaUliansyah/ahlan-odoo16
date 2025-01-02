@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="petunjuk_ongkir" name="Petunjuk Ongkir" inherit_id="website_sale_delivery.payment_delivery">
+        <xpath expr="//div[@class='card']" position="before">
+            <div id="petunjuk_ongkir" class="card">
+                <div class="col-12 col-xl order-xl-1 oe_cart">
+                    <div class="card-body">
+                    <h3>Petunjuk</h3>
+                        <p>Ongkir yang tidak menampilkan nominal berarti pilihan ongkir tersebut tidak tersedia untuk alamat tujuan. Silakan pilih dari ongkir yang menampilkan nominal.</p>
+                        <p>Untuk pengiriman ke alamat sendiri, biarkan alamat Billing &amp; Shipping sama.</p>
+                        <p>Untuk pengiriman dropship, klik <strong>Edit</strong> pada <em>Billing &amp; Shipping Address</em>, lalu klik <em>Add an Address</em></p>
+                        <p>Setelah memilih ongkir, tunggu sampai nominal ongkir masuk ke perhitungan total. Setelah itu baru klik Pay Now.</p>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>
