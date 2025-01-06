@@ -45,16 +45,19 @@ class ProductTemplate(models.Model):
     def _status_preorder(self):
         for order in self:
             current_date = fields.Date.context_today(self)
-            if order.tgl_selesai_po < current_date:
-                order.status_preorder = "close"
-            else :
-                if order.jml_preorder > 0 :
-                    if order.tot_preorder >= order.jml_preorder :
-                        order.status_preorder = "limit"
+            if order.tgl_selesai_po :
+                if order.tgl_selesai_po < current_date:
+                    order.status_preorder = "close"
+                else :
+                    if order.jml_preorder > 0 :
+                        if order.tot_preorder >= order.jml_preorder :
+                            order.status_preorder = "limit"
+                        else :
+                            order.status_preorder = "open"
                     else :
                         order.status_preorder = "open"
-                else :
-                    order.status_preorder = "open"
+            else :
+                order.status_preorder = "open"
                 
                 
     def cron_update_preorder(self):
