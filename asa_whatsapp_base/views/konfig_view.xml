@@ -1,0 +1,174 @@
+<openerp>
+  <data>
+  	
+      <record id="view_konf_form" model="ir.ui.view">
+            <field name="name">konf.form</field>
+            <field name="model">whatsapp.konf</field>
+            <field name="arch" type="xml">
+                <form string="Konfigurasi Form">
+                  	<group>
+	                    <group>
+	                        <field name="token"/>
+                          <field name="base_url"/>
+	                        <field name="aktif"/>
+	                     </group>
+	                    <group>
+                           
+                        </group>
+                      </group>
+                </form>
+            </field>
+      </record>
+        
+      <record id="view_konf_tree" model="ir.ui.view">
+            <field name="name">konf.tree</field>
+            <field name="model">whatsapp.konf</field>
+            <field name="arch" type="xml">
+                <tree string="Konfigurasi Tree">
+                	<field name="token"/>
+                  <field name="base_url"/>
+                	<field name="aktif"/>
+                </tree>
+            </field>
+      </record>
+
+
+
+      <record model="ir.actions.act_window" id="action_konf">
+        <field name="name">Account WhatsApp</field>
+        <field name="res_model">whatsapp.konf</field>
+        <field name="view_mode">tree,form</field>
+      </record>
+		
+	    <menuitem id="menu_konfigurasi"
+                  parent="main_whatsapp_menu"
+	     		  name="Setting"  
+                  sequence="2"/>  
+                  	
+      <menuitem id="menu_account"
+                  parent="menu_konfigurasi"   
+                  sequence="1"
+                  action="action_konf"/> 
+
+      <!-- <record id="template_wa_view_form" model="ir.ui.view">
+          <field name="name">template.wa.view.form</field>
+          <field name="model">asa.wa.template</field>
+          <field name="arch" type="xml">
+              <form string="Templates">
+                    <sheet>
+                      <group>
+                          <field name="name"/>
+                          <field name="type"/>
+                          <field name="isi_pesan"/>
+                      </group>
+                    </sheet>
+                </form>
+          </field>
+      </record>
+
+      <record id="asa_wa_template_view_tree" model="ir.ui.view">
+          <field name="name">asa_wa.template.view.tree</field>
+          <field name="model">asa.wa.template</field>
+          <field name="arch" type="xml">
+              <tree>
+                  <field name="name"/>
+                  <field name="type"/>
+                  <field name="isi_pesan"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="asa_wa_template_action" model="ir.actions.act_window">
+          <field name="name">WahatsApp Templates</field>
+          <field name="res_model">asa.wa.template</field>
+          <field name="view_mode">tree,form</field>
+          <field name="help" type="html">
+              <p class="oe_view_nocontent_create">Create an WhatsApp template</p>
+          </field>
+      </record>
+      
+      <menuitem id="asa_wa_template_menu" name="Template WhatsApp"  action="asa_wa_template_action"
+            parent="menu_konfigurasi" 
+            sequence="2"/> --> 
+
+      <record id="template_wa_view_form" model="ir.ui.view">
+          <field name="name">template.wa.view.form</field>
+          <field name="model">so.wa.template</field>
+          <field name="arch" type="xml">
+              <form string="Templates">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="isi_pesan"/>
+                        </group>
+                    </sheet>
+                </form>
+          </field>
+      </record>
+
+      <record id="fits_wa_template_view_tree" model="ir.ui.view">
+          <field name="name">fits_wa.template.view.tree</field>
+          <field name="model">so.wa.template</field>
+          <field name="arch" type="xml">
+              <tree>
+                  <field name="name"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="wa_so_template_action" model="ir.actions.act_window">
+          <field name="name">WahatsApp Templates</field>
+          <field name="res_model">so.wa.template</field>
+          <field name="view_mode">tree,form</field>
+          <field name="help" type="html">
+              <p class="oe_view_nocontent_create">Create an SO WhatsApp template</p>
+          </field>
+      </record>
+      
+      <menuitem id="menu_template" name="Template WhatsApp"
+            parent="menu_konfigurasi" sequence="3"/>
+      
+      <menuitem id="wa_so_template_menu" name="Template SO"  action="wa_so_template_action"
+            parent="menu_template" groups="sales_team.group_sale_manager" sequence="1"/>
+
+      <record id="template_wa_do_view_form" model="ir.ui.view">
+            <field name="name">template.wa.do.view.form</field>
+            <field name="model">do.wa.template</field>
+            <field name="arch" type="xml">
+                <form string="Templates">
+                      <sheet>
+                          <group>
+                              <field name="name"/>
+                              <field name="isi_pesan"/>
+                          </group>
+                      </sheet>
+                  </form>
+            </field>
+        </record>
+
+        <record id="fits_do_wa_template_view_tree" model="ir.ui.view">
+            <field name="name">fits_wa.do.template.view.tree</field>
+            <field name="model">do.wa.template</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="wa_do_template_action" model="ir.actions.act_window">
+            <field name="name">WahatsApp DO Templates</field>
+            <field name="res_model">do.wa.template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create an DO WhatsApp template</p>
+            </field>
+        </record>
+        
+        
+        <menuitem id="wa_do_template_menu" name="Template DO"  action="wa_do_template_action"
+              parent="menu_template" groups="sales_team.group_sale_manager" sequence="2"/>
+  
+
+   </data>
+</openerp>

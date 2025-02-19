@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_whatsapp_group,whatsapp.group,model_whatsapp_group,,1,1,1,1
+access_whatsapp_konf,whatsapp.konf,model_whatsapp_konf,,1,1,1,1
+access_whatsapp_personal,whatsapp.personal,model_whatsapp_personal,,1,1,1,1
+access_log_wa,log.wa,model_log_wa,,1,1,1,1
+access_asa.wa.template,asa.wa.template,model_asa_wa_template,,1,1,1,1
+access_so_wa_template,so_wa_template,model_so_wa_template,,1,1,1,1
+access_do_wa_template,do_wa_template,model_do_wa_template,,1,1,1,1
